@@ -8,3 +8,5 @@ class Weather(models.Model):
     wind_speed = models.FloatField()
     wind_deg = models.FloatField()
     cloud = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
