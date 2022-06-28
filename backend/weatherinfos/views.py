@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from .serializers import WeatherSerializer
 from .models import Weather
 from rest_framework.response import Response
+import datetime
 
 # Create your views here.
 @api_view(['GET', 'POST'])
@@ -17,9 +18,12 @@ def index(request):
     
 
     def post_weather():
-        weather = Weather.objects.order_by('-created_at')[0]
-        serializer = WeatherSerializer(weather)
-
+        # print(request.data)
+        # weather = Weather.objects.order_by('-created_at')[0]
+        # serializer = WeatherSerializer(weather)
+        now = datetime.datetime.now()
+        print('POST요청 받음')
+        print(now)
         post_serializer = WeatherSerializer(data=request.data)
         if post_serializer.is_valid(raise_exception=True):
 

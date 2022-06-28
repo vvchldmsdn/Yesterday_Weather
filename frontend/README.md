@@ -1,4 +1,4 @@
-# weather
+# frontend
 
 ## Project setup
 ```
