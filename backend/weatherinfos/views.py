@@ -11,22 +11,27 @@ def index(request):
 
 
     def get_weather():
-        weather = Weather.objects.order_by('-created_at')[0]
-        serializer = WeatherSerializer(weather)
-        print(type(serializer.data.get('created_at')))
-        return Response(serializer.data)
-    
+        '''
+        어제 날씨 데이터 다 받아서 넘기고 싶음
+        now값이랑 created_at값이랑 비교해야 함
+        '''
+        now = datetime.datetime.now()
+        now_hour = now.hour
+        weather = Weather.objects.order_by('-created_at')
+        if len(weather) > 24:
+            weather = Weather.objects.order_by('-created_at')[now_hour + 1: now_hour + 25]
+            serializer = WeatherSerializer(weather, many=True)
+            return Response(serializer.data)
+        else:
+            weather = Weather.objects.order_by('-created_at')[1]
+            serializer = WeatherSerializer(weather)
+            return Response([serializer.data])
+
 
     def post_weather():
-        # print(request.data)
-        # weather = Weather.objects.order_by('-created_at')[0]
-        # serializer = WeatherSerializer(weather)
-        now = datetime.datetime.now()
         print('POST요청 받음')
-        print(now)
         post_serializer = WeatherSerializer(data=request.data)
         if post_serializer.is_valid(raise_exception=True):
-
             post_serializer.save()
             return Response(post_serializer.data)
 
